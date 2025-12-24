@@ -1,29 +1,3 @@
-#!/usr/bin/env python3
-import subprocess, time
-from pathlib import Path
-
-OUT = Path("/data/data/com.termux/files/home/sonic-live/live.m3u")
-last_ip = ""
-
-def get_ipv6():
-    try:
-        ip = subprocess.check_output(
-            ["curl", "-6", "-s", "ifconfig.co"],
-            timeout=5
-        ).decode().strip()
-        if ":" in ip:
-            return ip
-    except:
-        pass
-    return None
-
-while True:
-    ipv6 = get_ipv6()
-    if ipv6 and ipv6 != last_ip:
-        OUT.write_text(
-            "#EXTM3U\n"
-            "#EXTINF:-1,Sonic Live\n"
-            f"http://[{ipv6}]:1212/stream.m3u8\n"
-        )
-        last_ip = ipv6
-    time.sleep(15)
+#EXTM3U
+#EXTINF:-1,Sonic Live
+http://[AUTO-UPDATED-IPv6]:1212/stream.m3u8
