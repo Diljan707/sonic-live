@@ -1,3 +1,23 @@
-#EXTM3U
-#EXTINF:-1,Sonic Live
-http://[2409:4090:d085:4208:f806:4e69:248c:b8e4]:1212/stream.m3u8
+#!/usr/bin/env python3
+import time, re, subprocess
+from pathlib import Path
+
+LOG = Path("/data/data/com.termux/files/home/sonic3/cf.log")
+OUT = Path("/data/data/com.termux/files/home/sonic-live/live.m3u")
+
+last = ""
+
+while True:
+    if LOG.exists():
+        text = LOG.read_text(errors="ignore")
+        m = re.search(r"https://[a-zA-Z0-9\-]+\.trycloudflare\.com", text)
+        if m:
+            url = m.group(0)
+            if url != last:
+                OUT.write_text(
+                    "#EXTM3U\n"
+                    "#EXTINF:-1,Sonic Live\n"
+                    f"{url}/stream.m3u8\n"
+                )
+                last = url
+    time.sleep(5)
